@@ -34,13 +34,14 @@ const getPos = function (ele, options) {
 };
 
 const getFakeOutputPortX = function (ele) {
+    if (ele.out_x===-1){
     var fakeOutport = ele.ports.filter(function (p) {
         return p.layoutOptions["port.side"] === "EAST"
     });
-    var x = fakeOutport[0].x;
+    ele.out_x = fakeOutport[0].x;}
     // console.log(fakeOutport);
     // console.log(x);
-    return x
+    return ele.out_x
 };
 
 
@@ -70,7 +71,8 @@ const makeNode = function (node, options) {
         idx: node.data('idx') || 0,
         isGroup: node.data('isGroup') || 'false',
         labels: [{'text': node.data('label')}],
-        ports: node.data('ports') || []
+        ports: node.data('ports') || [],
+        out_x: -1,
     };
     if (!node.hasClass('cy-expand-collapse-collapsed-node') & node.isParent()) {
         addPorts(node, k, options)
