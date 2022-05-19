@@ -1,11 +1,8 @@
 {
   "name": "cytoscape-elk",
   "version": "2.0.2",
-  "description": "The ELK layout algorithm adapter for Cytoscape.js",
   "main": "dist/cytoscape-elk.js",
-  "author": {
-    "name": "John Stephenson"
-  },
+  "private": true,
   "scripts": {
     "pages": "gh-pages -d demo",
     "postpublish": "run-s pages",
@@ -14,18 +11,11 @@
     "watch": "webpack --progress --watch --mode=development",
     "dev": "webpack serve"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cytoscape/cytoscape.js-elk.git"
-  },
   "keywords": [
     "cytoscape",
     "cytoscape-extension"
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cytoscape/cytoscape.js-elk/issues"
-  },
   "homepage": "https://github.com/cytoscape/cytoscape.js-elk",
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -44,6 +34,7 @@
     "cytoscape": "^3.2.0"
   },
   "dependencies": {
+    "cytoscape": "^3.2.0",
     "elkjs": "^0.7.0",
     "web-worker": "^1.2.0"
   },
