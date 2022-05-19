@@ -6507,14 +6507,14 @@ var elkOverrides = {};
 
 var getPos = function getPos(ele, options) {
   var dims = ele.layoutDimensions(options);
-  var parent = ele.parent();
   var k = ele.scratch('elk');
   var p = {
     x: k.x,
     y: k.y
   };
+  var parent = ele.parent();
 
-  if (parent.nonempty()) {
+  if (parent.nonempty() & !parent.hasClass('cy-expand-collapse-collapsed-node')) {
     forceToPortsPos(k, p, dims, parent.id(), options.elkEleLookup);
   }
 
@@ -6534,27 +6534,30 @@ var getPos = function getPos(ele, options) {
 };
 
 var getFakeOutputPortX = function getFakeOutputPortX(ele) {
-  var fakeOutport = ele.ports.filter(function (p) {
-    return p.layoutOptions["port.side"] == "EAST";
-  });
-  var x = fakeOutport[0].x; // console.log(fakeOutport);
+  if (ele.out_x === -1) {
+    var fakeOutport = ele.ports.filter(function (p) {
+      return p.layoutOptions["port.side"] === "EAST";
+    });
+    ele.out_x = fakeOutport[0].x;
+  } // console.log(fakeOutport);
   // console.log(x);
 
-  return x;
+
+  return ele.out_x;
 };
 
 var forceToPortsPos = function forceToPortsPos(k, p, dims, pid, elkEleLookup) {
   var category = k.category || '';
   var parent = elkEleLookup[pid]; // var parentDims = parent.layoutDimensions(options);
   // if (parent.nonempty() & !parent.hasClass('cy-expand-collapse-collapsed-node')) {
+  // var isGroup = parent.isGroup || 'false';
+  //   // if () double ports
 
-  var isGroup = parent.isGroup || 'false'; //   // if () double ports
-
-  if (category == 'output_port' & isGroup != 'true') {
+  if (category === 'output_port') {
     var out_x = getFakeOutputPortX(parent);
     p.x = out_x;
     p.y = 2 * dims.h * k.idx;
-  } else if (category == 'input_port' || category == 'output_port') {
+  } else if (category === 'input_port') {
     p.x = 0;
     p.y = 2 * dims.h * k.idx;
   }
@@ -6571,7 +6574,8 @@ var makeNode = function makeNode(node, options) {
     labels: [{
       'text': node.data('label')
     }],
-    ports: node.data('ports') || []
+    ports: node.data('ports') || [],
+    out_x: -1
   };
 
   if (!node.hasClass('cy-expand-collapse-collapsed-node') & node.isParent()) {
@@ -6604,7 +6608,6 @@ var addPorts = function addPorts(node, k, options) {
       w = dim.w;
     }
   });
-  w += 10;
   k.layoutOptions = {
     'elk.portConstraints': 'FIXED_SIDE',
     'nodeSize.constraints': "[NODE_LABELS, PORTS, PORT_LABELS]",
@@ -6622,10 +6625,16 @@ var addPorts = function addPorts(node, k, options) {
       "height": h
     }
   });
+  k.labels[0]["layoutOptions"] = {
+    "nodeLabels.placement": "[H_CENTER, V_TOP, OUTSIDE]"
+  };
+  k.labels[0]["width"] = (node.data('label').length + 2) * 8.5;
+  k.labels[0]["height"] = h;
 
-  if (node.data('label') == 'Input Ports' || node.data('label') == 'Output Ports') {
+  if (node.data('label') === 'Input Ports' || node.data('label') === 'Output Ports') {
     var n = node.children().length;
-    var side = node.data('label') == 'Input Ports' ? "WEST" : "EAST";
+    var side = node.data('label') === 'Input Ports' ? "WEST" : "EAST";
+    var H_ = node.data('label') == 'Input Ports' ? "[H_LEFT, V_CENTER, OUTSIDE]" : "[H_RIGHT, V_CENTER, OUTSIDE]";
     k.ports.push({
       'id': 'p1',
       "layoutOptions": {
@@ -6635,17 +6644,20 @@ var addPorts = function addPorts(node, k, options) {
         "width": w,
         "height": h * n * 2
       }]
-    });
+    }); // k.labels.push({"text": side})
+    // k.labels[1]["layoutOptions"]={"nodeLabels.placement": H_};
+    // k.labels[1]["width"]=w;
+    // k.labels[1]["height"]=h*n*2;
   }
 
   ;
 
   if (node.data('isGroup') != 'true') {
     var num_inputs = node.children().filter(function (n) {
-      return n.data('category') == 'input_port';
+      return n.data('category') === 'input_port';
     }).length;
     var num_outputs = node.children().filter(function (n) {
-      return n.data('category') == 'output_port';
+      return n.data('category') === 'output_port';
     }).length;
     k.ports.push({
       'id': 'p3',
@@ -6668,7 +6680,17 @@ var addPorts = function addPorts(node, k, options) {
         "height": h * 2 * num_outputs
       }
     });
-    var n = Math.max(num_outputs, num_inputs);
+    k.labels.push({
+      "text": "OUT"
+    });
+    k.labels[1]["layoutOptions"] = {
+      "nodeLabels.placement": "[H_RIGHT, V_CENTER, OUTSIDE]"
+    };
+    k.labels[1]["width"] = w;
+    k.labels[1]["height"] = h * 2 * num_outputs; // k.labels.push({"text": "IN"})
+    // k.labels[2]["layoutOptions"]={"nodeLabels.placement": "[H_LEFT, V_CENTER, OUTSIDE]"};
+    // k.labels[2]["width"]=w;
+    // k.labels[2]["height"]=h * 2 * num_inputs;
   }
 
   ;
