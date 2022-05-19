@@ -129,10 +129,10 @@ const addPorts = function (node, k, options) {
             'labels': [{"width": w, "height": h * n * 2}]
         });
 
-        k.labels.push({"text": side})
-        k.labels[1]["layoutOptions"]={"nodeLabels.placement": H_};
-        k.labels[1]["width"]=w;
-        k.labels[1]["height"]=h*n*2;
+        // k.labels.push({"text": side})
+        // k.labels[1]["layoutOptions"]={"nodeLabels.placement": H_};
+        // k.labels[1]["width"]=w;
+        // k.labels[1]["height"]=h*n*2;
     }
     ;
     if (node.data('isGroup') != 'true') {
@@ -150,15 +150,16 @@ const addPorts = function (node, k, options) {
             'labels': {"text": "", "width": w, "height": (h * 2 * num_outputs)}
         });
 
-        k.labels.push({"text": "IN"})
-        k.labels[1]["layoutOptions"]={"nodeLabels.placement": "[H_LEFT, V_CENTER, OUTSIDE]"};
-        k.labels[1]["width"]=w;
-        k.labels[1]["height"]=h * 2 * num_inputs;
 
         k.labels.push({"text": "OUT"})
-        k.labels[2]["layoutOptions"]={"nodeLabels.placement": "[H_RIGHT, V_CENTER, OUTSIDE]"};
-        k.labels[2]["width"]=w;
-        k.labels[2]["height"]=h * 2 * num_outputs;
+        k.labels[1]["layoutOptions"]={"nodeLabels.placement": "[H_RIGHT, V_CENTER, OUTSIDE]"};
+        k.labels[1]["width"]=w;
+        k.labels[1]["height"]=h * 2 * num_outputs;
+
+        // k.labels.push({"text": "IN"})
+        // k.labels[2]["layoutOptions"]={"nodeLabels.placement": "[H_LEFT, V_CENTER, OUTSIDE]"};
+        // k.labels[2]["width"]=w;
+        // k.labels[2]["height"]=h * 2 * num_inputs;
     }
     ;
     k.width = w;
