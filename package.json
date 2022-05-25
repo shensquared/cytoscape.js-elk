@@ -1,8 +1,7 @@
 {
-  "name": "cytoscape-elk",
-  "version": "2.0.2",
+  "name": "@shensquared/cytoscape-elk",
+  "version": "2.0.3",
   "main": "dist/cytoscape-elk.js",
-  "private": true,
   "scripts": {
     "pages": "gh-pages -d demo",
     "postpublish": "run-s pages",
@@ -16,7 +15,7 @@
     "cytoscape-extension"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/cytoscape/cytoscape.js-elk",
+  "homepage": "https://github.com/shensquared/cytoscape.js-elk",
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
@@ -49,5 +48,14 @@
     "last 2 major versions",
     "since 2012",
     "not op_mini all"
-  ]
+  ],
+  "description": "cytoscape-elk ================================================================================",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shensquared/cytoscape.js-elk.git"
+  },
+  "author": "shensquared",
+  "bugs": {
+    "url": "https://github.com/shensquared/cytoscape.js-elk/issues"
+  }
 }

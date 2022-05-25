@@ -1,5 +1,13 @@
 cytoscape-elk
 ================================================================================
+## Changes from the upstream
+Overwrite (some) children nodes positions, such that they're left/right justified inside of their parent. 
+
+This layout choice is, in itself, very easy to achieve with `elk`: we just need to treat the children nodes as `ports`. However, since we use `cytoscape.js` as the renderer (a choice motivated by its easy/better support of some other features), and since cytoscape doesn't support the notion of ports, we needed some hacking around. 
+
+The basic ideas behind the hack:
+1. "inflate" any parent node size based on its ports-type children, such that a) there won't be any overlapping with other parent nodes after elk does the layout, and b) the parent itself can accomodate its port children. This inflating is done via `addPorts` in `src/layout.js`
+2. Force set/overwite the ports-type children positions, such that the children are left/right justified within its parent. This is done via `forceToPortsPos` in `src/layout.js`
 
 ## Description
 
